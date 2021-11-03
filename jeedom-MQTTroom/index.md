@@ -1,37 +1,46 @@
-## Welcome to GitHub Pages
+# MQTTroom
 
-You can use the [editor on GitHub](https://github.com/arroyorl/arroyorl_docs/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+MQTT room, detecting room presence using BLE on devices and ESP32 with [espresense](https://espresense.com) or [ESP32 mqtt room](https://jptrsn.github.io/ESP32-mqtt-room) firmware. Usable devices are smart phones, activity bands, BLE tags and others.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+##Installation & Configuration
 
-### Markdown
+Flash and configure the ESP32 with either ESP32-MQTT-room or espresense. If you use espresense, I recommend setting the following preferences:
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+![Image](images/Preferences.png)
 
+Once you have all room presence detection (ESP32), installed in the corresponding rooms, download and install MQTTroom in Jeedom
+-	Install dependences if needed. If you have already installed Mosquitto or MQTT plugin, dependencies will appear as OK
+- Set configuration parameters as needed
+
+![Image](images/Configuration.png)
+
+  - Mosquitto IP is the IP address or URL of Mosquitto broker
+  - Mosquitto port: Port de connection to Mosquitto (usually 1883)
+  - Connection ID: Id of connection between MQTTroom and the mosquito browser, it must be different for each MQTT client connected to the broker
+  - Account and password: User and password of the connection to the MQTT broker
+  - Topic root: base MQTT topic for the MQTTroom environment. For espresense leave as default
+  - Presence timeout: Time (in minutes) of undetected device(s) to mark a room or a device as no presence
+
+Once started the daemon, MQTTroom will detect the existing ESP32 room presence detectors and add automatically to the “Rooms” section of the plugin
+
+![Image](images/Rooms.png)
+
+To better discover the detectors, put an BLE device (phone, tablet, activity band, …) near each of the detectors
+- Add a new device, using the “+” button
+- Define all device parameters: name, parent object, …. Set is as enabled
+- Using mosquito-client, display the log of MQTT room detected devices
+    mosquitto_sub -v -h <IP address> -t espresense/rooms/#
+- Find the devices id in the log, i.e.:
 ```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+    espresense/rooms/despacho {"id":"iBeacon:2f234757-cf6d-4a0f-adf2-f4911ba9ffa6-1-0","rssi@1m":-75,"rssi":-96,"mac":"4412ce91ba08","raw":3.98,"distance":2.61,"speed":0.1}
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+  - In the above listed entry, copy the highlighted id, and set as “Name of Device”
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/arroyorl/arroyorl_docs/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+  ![Image](images/Equipement.png)
+  
+- Save the device configuration
+- Once the device will be detected by any of the presence detectors (ESP32), the plugin will automatically add 3 commands:
+  - Presence (Boolean)
+  - Room name. Room when the device has been detected
+  - Distance (numeric)
