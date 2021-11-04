@@ -1,1 +1,8 @@
 theme: jekyll-theme-cayman
+languages: ["en", "fr"]
+exclude_from_localizations: ["assets", "CNAME"]
+defaultLang: es
+languageNames:
+  es: Español
+  fr: Français
+  en: English
