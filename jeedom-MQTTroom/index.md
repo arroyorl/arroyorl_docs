@@ -1,4 +1,4 @@
-## MQTTroom
+# MQTTroom
 
 MQTT room, detecting room presence using BLE on devices and ESP32 with [espresense](https://espresense.com) or [ESP32 mqtt room](https://jptrsn.github.io/ESP32-mqtt-room) firmware. Usable devices are smart phones, activity bands, BLE tags and others.
 
