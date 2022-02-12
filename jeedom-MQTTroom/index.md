@@ -20,6 +20,7 @@ Once you have all room presence detection (ESP32), installed in the correspondin
   - Account and password: User and password of the connection to the MQTT broker
   - Topic root: base MQTT topic for the MQTTroom environment. For espresense leave as default
   - Presence timeout: Time (in minutes) of undetected device(s) to mark a room or a device as no presence
+  - Presence timeout (global devices): time in minutes for mark global devices as no presence
 
 Once started the daemon, MQTTroom will detect the existing ESP32 room presence detectors and add automatically to the “Rooms” section of the plugin
 
@@ -36,6 +37,7 @@ To better discover the detectors, put an BLE device (phone, tablet, activity ban
 ```
 
   - In the above listed entry, copy the highlighted id, and set as “Name of Device”
+  - Device may be defined as "global". Global devices do not activate presence in rooms, only the device is set as presence when received BLE message from it. These type of devices allow to detect if the device/person is in the house, but not activate any room presence scenarios. BLE labels / tiles are best for this use
 
   ![Image](images/Equipement.png)
   
